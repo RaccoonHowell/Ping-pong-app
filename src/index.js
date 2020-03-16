@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 import { createStore } from "redux";
 
 const initial = {
@@ -12,23 +10,54 @@ const initial = {
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case "INCREMENT": return { ...state, value: state.value + 1 }; default: return state;
-    } 
+        case "player1Scored" : return {
+            ...state,
+            player1 : state.player1 + 1
+        }
+        case "player2Scored" : return {
+            ...state,
+            player2 : state.player2 + 1
+        }
+        case "reset" : return initial;
+        
+        default: return state;
+    }
 };
 
-const store = createStore(reducer, initial);
+const store = createStore(
+    reducer,
+    initial,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
-store.subscribe(() => {
-    let state = store.getState();
+const handlePlayer1Score = () => {
+    store.dispatch({ type: "player1Scored" })
+}
 
-    console.log(state.count); 
-});
+const handlePlayer2Score = () => {
+    store.dispatch({ type: "player2Scored" })
+}
 
-store.dispatch({ type: "INCREMENT" });
+const handleReset = () => {
+    store.dispatch({ type: "reset" })
+}
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const render = () => {
+    const state = store.getState();
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    ReactDOM.render(
+        <App 
+            player1Score={ state.player1 } 
+            player2Score={ state.player2 } 
+            handlePlayer1Score={ handlePlayer1Score }
+            handlePlayer2Score={ handlePlayer2Score }
+            handleReset={ handleReset}
+        />, 
+
+        document.getElementById('root')
+    );
+}
+
+store.subscribe(render);
+
+render();
