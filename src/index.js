@@ -9,6 +9,7 @@ const initial = {
     player1: 0,
     player2: 0,
     player1Serving: true,
+    winner: 0,
 };
 
 // functions to update player1 and player2 state
@@ -40,15 +41,29 @@ const changeServer = state => {
     };
 }
 
+const handleWinner = state => {
+    const winner = (state.player1 === 21 || state.player2 === 21)
+
+    const higherScore = state.player1 > state.player2 ? 1 : 2;
+
+    const newWinner = winner ? higherScore : 0;
+
+    return {
+        ...state,
+        winner: newWinner
+    }
+}
+
 // reducer returns state (updates the state or returns initial). All functions in a reducer must accept and return state
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case "player1": return changeServer(updateP1Score(state));
+        case "player1": return handleWinner(changeServer(updateP1Score(state)));
 
-        case "player2": return changeServer(updateP2Score(state));
+        case "player2": return handleWinner(changeServer(updateP2Score(state)));
 
         case "reset": return initial;
+
         
         default: return state;
     }
@@ -89,6 +104,7 @@ const render = () => {
             handlePlayer2Score={ handlePlayer2Score }
             handleReset={ handleReset}
             player1Serving={ state.player1Serving }
+            winner={ state.winner }
         />, 
 
         document.getElementById('root')
@@ -118,3 +134,5 @@ Only then should you think about the reducer.
 I'd write a separate function that takes a version of the state and updates the server/player1Serving property appropriately. You can test this using console.log() (or TDD if you're feeling adventurous).
 Only once you've got that working would I try and get it working in the reducer.
 */
+
+// If the value of player1 gets to 21 then you should show the "Player 1 Wins" message. If the value of player2 gets to 21 then you should show the "Player 2 Wins" message. If no one has won yet, then the "Player x Wins" message should not display at all. The winner logic is business logic, so it should be in the reducer. The wording for the message is view logic so it should go in the component.
