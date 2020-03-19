@@ -1,94 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { createStore } from "redux";
-
-// setting initial state
-
-const initial = {
-    player1: 0,
-    player2: 0,
-    player1Serving: true,
-    winner: 0,
-};
-
-// functions to update player1 and player2 state
-
-const updateP1Score = state => ({ 
-    ...state, 
-    player1: state.player1 + 1 
-})
-
-const updateP2Score = state => ({ 
-    ...state, 
-    player2: state.player2 + 1 
-})
-
-// function to determine whether player1Serving needs to be updated and updates as necessary
-
-const changeServer = state => {
-    const total = state.player1 + state.player2;
-
-    const needToSwitch = total % 5 === 0;
-
-    if (!needToSwitch) {
-        return state;
-    }
-
-    return {
-        ...state,
-        player1Serving: state.player1Serving ? false : true,
-    };
-}
-
-const handleWinner = state => {
-    const winner = (state.player1 === 21 || state.player2 === 21)
-
-    const higherScore = state.player1 > state.player2 ? 1 : 2;
-
-    const newWinner = winner ? higherScore : 0;
-
-    return {
-        ...state,
-        winner: newWinner
-    }
-}
-
-// reducer returns state (updates the state or returns initial). All functions in a reducer must accept and return state
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "player1": return handleWinner(changeServer(updateP1Score(state)));
-
-        case "player2": return handleWinner(changeServer(updateP2Score(state)));
-
-        case "reset": return initial;
-
-        
-        default: return state;
-    }
-};
-
-// protective wrapper around the state so that it isn't accidentally updated in other places
-
-const store = createStore(
-    reducer,
-    initial,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+import store from "./data/store";
 
 // event handler functions that are called by the event listeners on the buttons in App.js. Interacting with the store
 
 const handlePlayer1Score = () => {
-    store.dispatch({ type: "player1" })
+    store.dispatch({ type: "PLAYER1" })
 }
 
 const handlePlayer2Score = () => {
-    store.dispatch({ type: "player2" })
+    store.dispatch({ type: "PLAYER2" })
 }
 
 const handleReset = () => {
-    store.dispatch({ type: "reset" })
+    store.dispatch({ type: "RESET" })
 }
 
 // setting up props
@@ -136,3 +62,5 @@ Only once you've got that working would I try and get it working in the reducer.
 */
 
 // If the value of player1 gets to 21 then you should show the "Player 1 Wins" message. If the value of player2 gets to 21 then you should show the "Player 2 Wins" message. If no one has won yet, then the "Player x Wins" message should not display at all. The winner logic is business logic, so it should be in the reducer. The wording for the message is view logic so it should go in the component.
+
+// Split up your App.js into sensible sub-components and use props to pass down the relevant values. Remember, if you have two bits of UI that are basically the same they should reuse the same component
