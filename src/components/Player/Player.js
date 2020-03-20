@@ -17,4 +17,5 @@ const Player = ({ title, score, handleScore, serving}) => {
         </div>
     )
 }
+
 export default Player;
