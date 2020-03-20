@@ -2,25 +2,22 @@ import React from "react";
 import Header from "./components/Header";
 import Winner from "./components/Winner";
 import Reset from "./components/Reset";
-import Scores from "./components/Scores";
+import Player1 from "./components/Player/Player1";
+import Player2 from "./components/Player/Player2";
 
-const App = ({ player1Score, player2Score, handlePlayer1Score, handlePlayer2Score, handleReset , player1Serving, winner }) => (
+const App = () => (
     <>
         <Header />
 
-        <Scores 
-        	player1Serving={ player1Serving }
-            player1Score={ player1Score }
-            player2Score={ player2Score }
-            handlePlayer1Score={ handlePlayer1Score }
-            handlePlayer2Score={ handlePlayer2Score }
-		/>
+        <Player1 />
+
+		<Player2 />
         
-        <Winner winner={ winner } />      
+        <Winner />      
 
         <hr />
 
-        <Reset handleReset={ handleReset } />   
+        <Reset />   
     </>
 );
 

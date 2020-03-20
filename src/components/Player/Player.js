@@ -1,6 +1,6 @@
 import React from "react";
 
-const Score = ({ title, score, handleScore, serving}) => {
+const Player = ({ title, score, handleScore, serving}) => {
     return (
         <div className="col-md-6 mt-4">
             <div className={ "card text-center" + (serving ? " bg-dark text-white" : "") }>
@@ -17,4 +17,4 @@ const Score = ({ title, score, handleScore, serving}) => {
         </div>
     )
 }
-export default Score;
+export default Player;

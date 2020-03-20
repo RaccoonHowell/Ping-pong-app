@@ -10,7 +10,7 @@ const reducer = (state, action) => {
     switch (action.type) {
         case "PLAYER1": return handleWinner(changeServer(updateP1Score(state)));
 
-        case "PLAYER": return handleWinner(changeServer(updateP2Score(state)));
+        case "PLAYER2": return handleWinner(changeServer(updateP2Score(state)));
 
         case "RESET": return initial;
 
